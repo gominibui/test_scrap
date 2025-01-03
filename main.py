@@ -22,9 +22,9 @@ class FacebookScraper:
 
         # Logging settings
         logging.basicConfig(
-            filename='out.log',
+            filename="out.log",
             level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s'
+            format="%(asctime)s - %(levelname)s - %(message)s"
         )
 
     def create_driver(self) -> webdriver.Chrome:
@@ -56,16 +56,14 @@ class FacebookScraper:
             logging.info("Password entered")
 
             pass_input.send_keys(Keys.ENTER)
-            time.sleep(5)
             logging.info("Enter was pressed.")
-            time.sleep(10)
         except Exception as e:
             logging.error("Error logging in: %s", e)
             raise
 
     def go_to_profile(self) -> None:
         try:
-            self.driver.get('https://www.facebook.com/me')
+            self.driver.get("https://www.facebook.com/me")
             logging.info("Opened profile page.")
         except Exception as e:
             logging.error("Error navigating to profile: %s", e)
@@ -74,8 +72,8 @@ class FacebookScraper:
     def get_profile_image_url(self) -> Optional[str]:
         try:
             image_url = self.driver.execute_script("""
-                var image = document.querySelector('image');
-                return image ? image.getAttribute('xlink:href') : null;
+                var image = document.querySelector("image");
+                return image ? image.getAttribute("xlink:href") : null;
             """)
             return image_url
         except Exception as e:
@@ -84,7 +82,7 @@ class FacebookScraper:
 
     def save_image(self, image_url: str) -> None:
         try:
-            folder_path = 'd_image'
+            folder_path = "d_image"
             os.makedirs(folder_path, exist_ok=True)
 
             response = requests.get(image_url)
@@ -92,7 +90,7 @@ class FacebookScraper:
             if response.status_code == 200:
                 unique_filename = f"{int(time.time())}_{uuid.uuid4().hex}.jpg"
                 file_path = os.path.join(folder_path, unique_filename)
-                with open(file_path, 'wb') as file:
+                with open(file_path, "wb") as file:
                     file.write(response.content)
                 logging.info(f"Image saved as {file_path}")
             else:
@@ -129,7 +127,7 @@ class FacebookScraper:
 
 def load_config(file_path: str) -> dict:
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
     except Exception as e:
         logging.error(f"Error open json file: {e}")
