@@ -65,6 +65,7 @@ class FacebookScraper:
         try:
             self.driver.get("https://www.facebook.com/me")
             logging.info("Opened profile page.")
+            WebDriverWait(self.driver, 500)
         except Exception as e:
             logging.error("Error navigating to profile: %s", e)
             raise
